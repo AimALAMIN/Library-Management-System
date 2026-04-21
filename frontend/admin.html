@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="nav-brand">Admin Portal</div>
+    <div class="nav-user">
+      <span id="userName"></span>
+      <button class="btn btn-danger" onclick="logout()" style="padding: 0.5rem 1rem;">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="card">
+      <h2>System Rules</h2>
+      <form id="settingsForm" style="display: grid; grid-template-columns: 1fr 1fr auto; gap: 1rem; align-items: end; margin-top: 1rem;">
+        <div class="input-group" style="margin-bottom: 0;">
+          <label>Fine per day (₹)</label>
+          <input type="number" id="finePerDay" required step="0.01">
+        </div>
+        <div class="input-group" style="margin-bottom: 0;">
+          <label>Max Issue Duration (Days)</label>
+          <input type="number" id="maxDuration" required min="1">
+        </div>
+        <button type="submit" class="btn" style="width: auto; padding: 0.75rem 2rem;">Save Rules</button>
+      </form>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2>Manage Books</h2>
+        <button class="btn" style="width: auto;" onclick="openAddBookModal()">+ Add Book</button>
+      </div>
+      <table id="booksTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Total Copies</th>
+            <th>Available</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2>Existing Staff</h2>
+        <button class="btn" style="width: auto;" onclick="openUserModal('staff')">+ Add Staff</button>
+      </div>
+      <table id="staffTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2>Existing Students</h2>
+        <button class="btn" style="width: auto; background-color: var(--success);" onclick="openUserModal('student')">+ Add Student</button>
+      </div>
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add/Edit Book Modal -->
+  <div class="modal-overlay" id="bookModal">
+    <div class="modal-content">
+      <div class="flex-between">
+        <h3 id="bookModalTitle">Add Book</h3>
+        <button class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem;" onclick="closeModal('bookModal')">X</button>
+      </div>
+      <form id="bookForm">
+        <input type="hidden" id="bookId">
+        <div class="input-group">
+          <label>Title</label>
+          <input type="text" id="bookTitle" required>
+        </div>
+        <div class="input-group">
+          <label>Author</label>
+          <input type="text" id="bookAuthor" required>
+        </div>
+        <div class="input-group">
+          <label>Total Copies</label>
+          <input type="number" id="bookCopies" required min="1">
+        </div>
+        <div class="input-group" id="availableCopiesGroup" style="display: none;">
+          <label>Available Copies</label>
+          <input type="number" id="bookAvailable" min="0">
+        </div>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal-content">
+      <div class="flex-between">
+        <h3>Add User</h3>
+        <button class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem;" onclick="closeModal('userModal')">X</button>
+      </div>
+      <form id="userForm">
+        <div class="input-group">
+          <label>Name</label>
+          <input type="text" id="userNameInput" required>
+        </div>
+        <div class="input-group">
+          <label>Email</label>
+          <input type="email" id="userEmail" required>
+        </div>
+        <div class="input-group">
+          <label>Password</label>
+          <div class="password-wrapper">
+            <input type="password" id="userPassword" required>
+            <span class="password-toggle" onclick="togglePassword('userPassword', this)">👁️</span>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Role</label>
+          <select id="userRole" required style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; background: var(--bg-color); border: 1px solid var(--border-color); color: var(--text-main);">
+            <option value="student">Student</option>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    // Admin specific scripts loaded via app.js context or here
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth('admin');
+      loadAdminData();
+    });
+  </script>
+</body>
+</html>

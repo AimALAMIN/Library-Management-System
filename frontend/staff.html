@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="nav-brand">Staff Portal</div>
+    <div class="nav-user">
+      <span id="userName"></span>
+      <button class="btn btn-danger" onclick="logout()" style="padding: 0.5rem 1rem;">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="card">
+      <div class="flex-between">
+        <h2>Manage Books</h2>
+        <button class="btn" style="width: auto;" onclick="openAddBookModal()">+ Add Book</button>
+      </div>
+      <table id="booksTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Available/Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="flex-between">
+        <h2>Issued Books</h2>
+        <button class="btn btn-success" style="width: auto;" onclick="openModal('issueModal')">Issue Book</button>
+      </div>
+      <table id="issuesTable">
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Student</th>
+            <th>Issued Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Add/Edit Book Modal (Same as Admin) -->
+  <div class="modal-overlay" id="bookModal">
+    <div class="modal-content">
+      <div class="flex-between">
+        <h3 id="bookModalTitle">Add Book</h3>
+        <button class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem;" onclick="closeModal('bookModal')">X</button>
+      </div>
+      <form id="bookForm">
+        <input type="hidden" id="bookId">
+        <div class="input-group">
+          <label>Title</label>
+          <input type="text" id="bookTitle" required>
+        </div>
+        <div class="input-group">
+          <label>Author</label>
+          <input type="text" id="bookAuthor" required>
+        </div>
+        <div class="input-group">
+          <label>Total Copies</label>
+          <input type="number" id="bookCopies" required min="1">
+        </div>
+        <div class="input-group" id="availableCopiesGroup" style="display: none;">
+          <label>Available Copies</label>
+          <input type="number" id="bookAvailable" min="0">
+        </div>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Issue Book Modal -->
+  <div class="modal-overlay" id="issueModal">
+    <div class="modal-content">
+      <div class="flex-between">
+        <h3>Issue Book</h3>
+        <button class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem;" onclick="closeModal('issueModal')">X</button>
+      </div>
+      <form id="issueForm">
+        <div class="input-group">
+          <label>Book ID</label>
+          <input type="number" id="issueBookId" required>
+        </div>
+        <div class="input-group">
+          <label>Student ID</label>
+          <input type="number" id="issueStudentId" required>
+        </div>
+        <button type="submit" class="btn">Issue</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Edit Issue Modal (Set Fine/Return Date) -->
+  <div class="modal-overlay" id="editIssueModal">
+    <div class="modal-content">
+      <div class="flex-between">
+        <h3>Edit Issue Record</h3>
+        <button class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem;" onclick="closeModal('editIssueModal')">X</button>
+      </div>
+      <form id="editIssueForm">
+        <input type="hidden" id="editIssueId">
+        <div class="input-group">
+          <label>Return Date</label>
+          <input type="date" id="editReturnDate">
+        </div>
+        <div class="input-group">
+          <label>Fine Amount</label>
+          <input type="number" id="editFine" step="0.01">
+        </div>
+        <button type="submit" class="btn">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth('staff');
+      loadStaffData();
+    });
+  </script>
+</body>
+</html>

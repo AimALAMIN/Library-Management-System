@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="dashboard-header">
+    <div class="nav-brand">Library Portal</div>
+    <div class="nav-user">
+      <span id="userName"></span>
+      <button class="btn btn-danger" onclick="logout()" style="padding: 0.5rem 1rem;">Logout</button>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="card">
+      <div class="flex-between">
+        <h2>Available Books</h2>
+        <div style="display: flex; gap: 0.5rem;">
+          <input type="text" id="searchInput" placeholder="Search title/author" style="padding: 0.5rem; border-radius: 0.25rem; border: 1px solid var(--border-color); background: var(--bg-color); color: white;">
+          <button class="btn" style="width: auto; padding: 0.5rem 1rem;" onclick="searchBooks()">Search</button>
+        </div>
+      </div>
+      <table id="booksTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Available</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>My Issued Books & History</h2>
+      <table id="issuesTable">
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>Issued Date</th>
+            <th>Due Date</th>
+            <th>Fine</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth('student');
+      loadStudentData();
+    });
+  </script>
+</body>
+</html>
